@@ -29,7 +29,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Employee Form</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close btn" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form id="employeeForm">
@@ -112,7 +112,7 @@
 
             // Delete employee button click
             $(document).on('click', '.deleteBtn', function () {
-                if (confirm('Are you sure to delete this record?')) {
+                if (confirm('Are you sure to delete this employee?')) {
                     var id = $(this).data('id');
                     $.ajax({
                         url: '@Url.Action("DeleteEmployee", "Employee")/' + id,
@@ -140,4 +140,5 @@
             });
         });
     </script>
+
 </main>
