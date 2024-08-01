@@ -9,7 +9,7 @@ namespace EmployeeManagement
         public static void Register(HttpConfiguration config)
         {
             // Configuración y servicios de Web API
-            Database.SetInitializer(new EmployeeDBInitializer());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<EmployeeDBContext>());
 
             // Rutas de Web API
             config.MapHttpAttributeRoutes();

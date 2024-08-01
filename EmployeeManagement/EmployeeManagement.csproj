@@ -146,7 +146,6 @@
     </Compile>
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeeDBContext.cs" />
-    <Compile Include="Models\EmployeeDBInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
