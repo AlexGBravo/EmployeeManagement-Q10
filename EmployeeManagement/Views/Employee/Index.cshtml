@@ -5,13 +5,28 @@
     <div class="container">
 
         @* Tittle *@
-        <h2>Employee Management</h2>
+        <h2 class="mb-3">Employee Management</h2>
 
         @* Add button *@
-        <button id="addEmployeeBtn" class="btn btn-primary mb-3">Add Employee</button>
+        <button id="addEmployeeBtn" class="btn btn-primary mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+            </svg>
+            Add Employee
+        </button>
+
+        @* Refresh button *@
+        <button id="refreshEmployeeBtn" class="btn btn-primary mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+            </svg>
+            Refresh Employees
+        </button>
 
         @* Table *@
-        <table class="table-bordered table">
+        <table class="table-hover table">
 
             @* Headers *@
             <thead>
@@ -29,7 +44,8 @@
             <tbody id="employeeTableBody">
                 <tr>
                     <td colspan="6">
-                        <label>Loading</label>
+                        <div class="spinner-border text-primary" role="status">
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -41,7 +57,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Employee Form</h5>
-                        <button type="button" class="close btn" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close btn btn-light" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
                     </div>
 
                     @* Entries *@
@@ -71,6 +87,12 @@
             </div>
         </div>
 
+
+        <div id="spinner" class="visually-hidden">
+            <div class="spinner-border text-primary" role="status">
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -83,6 +105,17 @@
                     url: '@Url.Action("GetEmployees", "Employee")',
                     type: 'GET',
                     dataType: 'json',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error: ' + textStatus, errorThrown);
+                        alert('Ocurrió un error: ' + textStatus);
+                    },
+                    beforeSend: function () {
+
+                        console.log("Before")
+                        let rows = '<tr><td colspan="6">' + document.getElementById("spinner").innerHTML + '</td></tr>';
+                        $('#employeeTableBody').html(rows);
+
+                    },
                     success: function (data) {
                         var rows = '';
                         $.each(data, function (i, employee) {
@@ -105,6 +138,13 @@
                 $('#employeeForm')[0].reset();
                 $('#employeeId').val('');
                 $('#employeeModal').modal('show');
+            });
+
+            // Add employee button click
+            $('#refreshEmployeeBtn').click(function () {
+                $('#employeeForm')[0].reset();
+                $('#employeeId').val('');
+                loadEmployees()
             });
 
             // Edit employee button click
