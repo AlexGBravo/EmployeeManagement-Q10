@@ -10,6 +10,14 @@ Proyecto ASP.NET MVC para la gestión de empleados, utilizando Entity Framework y
 - Paquetes NuGet necesarios:
   - EntityFramework
 
+
+## Demo
+
+Para efectos prácticos, esta aplicación fue desplegada en un servidor gratuito en somee.com
+
+https://q10-technical-test.somee.com/
+
+
 ## Instrucciones de Configuración
 
 ### 1. Clonar el Repositorio
@@ -17,14 +25,14 @@ Proyecto ASP.NET MVC para la gestión de empleados, utilizando Entity Framework y
 Clona el repositorio en tu máquina local.
 
 ```bash
-git clone https://github.com/tu_usuario/EmployeeManagement.git
+git clone https://github.com/AlexGBravo/EmployeeManagement-Q10
 ```
 
 
-2. Abrir el Proyecto en Visual Studio
+### 2. Abrir el Proyecto en Visual Studio
 Abre el archivo de solución EmployeeManagement.sln en Visual Studio.
 
-3. Configurar la Cadena de Conexión
+### 3. Configurar la Cadena de Conexión
 Abre el archivo Web.config y asegúrate de que la cadena de conexión esté configurada correctamente. Añade o modifica la sección <connectionStrings> como se muestra a continuación:
 
 ```xml
@@ -36,3 +44,21 @@ Abre el archivo Web.config y asegúrate de que la cadena de conexión esté configu
 ```
 
 Reemplaza connectionString con una cadena de conexión valida.
+
+### 4. Ejecutar el proyecto
+
+Ahora se puede ejecutar el proyecto, la app al iniciar y crear la estructura de la base de datos.
+
+
+Puedes ejecutar el proyecto desde la UI de Visual Studio o usando comandos.
+
+Comandos:
+
+* Ejecuta ```Developer Command Prompt``` 
+* Navega a la carpeta donde esta el archivo ```EmployeeManagement.csproj``` usando ```cd ...```
+* Restaurar los paquetes ```dotnet restore```
+* Ejecuta ```msbuild EmployeeManagement.csproj```
+
+* Navega a la carpeta final ```cd bin\Debug``` y ejecuta ```EmployeeManagement.exe```
+
+
