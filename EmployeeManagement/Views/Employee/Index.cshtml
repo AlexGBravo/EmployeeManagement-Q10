@@ -1,11 +1,19 @@
-﻿@{ 
-    ViewBag.Tittle = "Inicio";
+﻿@{
+    ViewBag.Title = "Employees";
 }
 <main>
     <div class="container">
+
+        @* Tittle *@
         <h2>Employee Management</h2>
+
+        @* Add button *@
         <button id="addEmployeeBtn" class="btn btn-primary mb-3">Add Employee</button>
+
+        @* Table *@
         <table class="table-bordered table">
+
+            @* Headers *@
             <thead>
                 <tr>
                     <th>Id</th>
@@ -16,14 +24,18 @@
                     <th>Actions</th>
                 </tr>
             </thead>
+
+            @* Employee content *@
             <tbody id="employeeTableBody">
-              <tr>
-                  <td colspan="6"><label>Loading</label></td>
-              </tr>
+                <tr>
+                    <td colspan="6">
+                        <label>Loading</label>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
-        <!-- Employee Form Modal -->
+        @* Employee Form Modal *@
         <div id="employeeModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -31,6 +43,8 @@
                         <h5 class="modal-title">Employee Form</h5>
                         <button type="button" class="close btn" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
                     </div>
+
+                    @* Entries *@
                     <div class="modal-body">
                         <form id="employeeForm">
                             <input type="hidden" id="employeeId" name="Id" />
@@ -56,6 +70,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
