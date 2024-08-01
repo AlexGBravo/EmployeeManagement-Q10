@@ -47,7 +47,7 @@ Reemplaza connectionString con una cadena de conexión valida.
 
 ### 4. Ejecutar el proyecto
 
-Ahora se puede ejecutar el proyecto, la app al iniciar y crear la estructura de la base de datos.
+Ahora se puede ejecutar el proyecto, la aplicación al iniciar, creara la estructura de la base de datos.
 
 
 Puedes ejecutar el proyecto desde la UI de Visual Studio o usando comandos.
