@@ -1,0 +1,143 @@
+﻿@{ 
+    ViewBag.Tittle = "Inicio";
+}
+<main>
+    <div class="container">
+        <h2>Employee Management</h2>
+        <button id="addEmployeeBtn" class="btn btn-primary mb-3">Add Employee</button>
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+              <tr>
+                  <td colspan="6"><label>Loading</label></td>
+              </tr>
+            </tbody>
+        </table>
+
+        <!-- Employee Form Modal -->
+        <div id="employeeModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Employee Form</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="employeeForm">
+                            <input type="hidden" id="employeeId" name="Id" />
+                            <div class="form-group mb-2">
+                                <label for="employeeName">Name</label>
+                                <input type="text" class="form-control" id="employeeName" name="Name" required />
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="employeePosition">Position</label>
+                                <input type="text" class="form-control" id="employeePosition" name="Position" required />
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="employeeOffice">Office</label>
+                                <input type="text" class="form-control" id="employeeOffice" name="Office" required />
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="employeeSalary">Salary</label>
+                                <input type="number" class="form-control" id="employeeSalary" name="Salary" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            loadEmployees();
+
+            // Load employees
+            function loadEmployees() {
+                $.ajax({
+                    url: '@Url.Action("GetEmployees", "Employee")',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var rows = '';
+                        $.each(data, function (i, employee) {
+                            rows += '<tr>';
+                            rows += '<td>' + employee.Id + '</td>';
+                            rows += '<td>' + employee.Name + '</td>';
+                            rows += '<td>' + employee.Position + '</td>';
+                            rows += '<td>' + employee.Office + '</td>';
+                            rows += '<td>' + employee.Salary + '</td>';
+                            rows += '<td><button class="btn btn-sm btn-primary editBtn" data-id="' + employee.Id + '">Edit</button> <button class="btn btn-sm btn-danger deleteBtn" data-id="' + employee.Id + '">Delete</button></td>';
+                            rows += '</tr>';
+                        });
+                        $('#employeeTableBody').html(rows);
+                    }
+                });
+            }
+
+            // Add employee button click
+            $('#addEmployeeBtn').click(function () {
+                $('#employeeForm')[0].reset();
+                $('#employeeId').val('');
+                $('#employeeModal').modal('show');
+            });
+
+            // Edit employee button click
+            $(document).on('click', '.editBtn', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("GetEmployeeById", "Employee")/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#employeeId').val(data.Id);
+                        $('#employeeName').val(data.Name);
+                        $('#employeePosition').val(data.Position);
+                        $('#employeeOffice').val(data.Office);
+                        $('#employeeSalary').val(data.Salary);
+                        $('#employeeModal').modal('show');
+                    }
+                });
+            });
+
+            // Delete employee button click
+            $(document).on('click', '.deleteBtn', function () {
+                if (confirm('Are you sure to delete this record?')) {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        url: '@Url.Action("DeleteEmployee", "Employee")/' + id,
+                        type: 'POST',
+                        success: function (data) {
+                            loadEmployees();
+                        }
+                    });
+                }
+            });
+
+            // Form submit
+            $('#employeeForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: $('#employeeId').val() ? '@Url.Action("UpdateEmployee", "Employee")' : '@Url.Action("AddEmployee", "Employee")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        $('#employeeModal').modal('hide');
+                        loadEmployees();
+                    }
+                });
+            });
+        });
+    </script>
+</main>
