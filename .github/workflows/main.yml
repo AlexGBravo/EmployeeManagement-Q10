@@ -1,0 +1,37 @@
+name: Deploy .NET App to FTP (Windows 32-bit)
+
+on:
+  push:
+    branches:
+      - main  # Despliega cuando hay un push a la rama main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0' # Especifica la versión de .NET que estás usando
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build project for x86 (32-bit)
+      run: dotnet build --configuration Release --runtime win-x86 --no-restore
+
+    - name: Publish project for x86 (32-bit)
+      run: dotnet publish -c Release -r win-x86 -o ./output --self-contained
+
+    - name: Upload to FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        ftp-server: ${{ secrets.FTP_SERVER }}
+        ftp-username: ${{ secrets.FTP_USERNAME }}
+        ftp-password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./output  # La carpeta que contiene los archivos compilados
+        git-ftp-args: --insecure  # Opcional: útil si el servidor tiene SSL autogenerado
