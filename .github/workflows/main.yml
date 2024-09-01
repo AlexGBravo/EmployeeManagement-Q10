@@ -1,37 +1,35 @@
-name: Deploy .NET App to FTP (Windows 32-bit)
+name: Deploy .NET 8.0 App to FTP
 
 on:
   push:
     branches:
-      - main  # Despliega cuando hay un push a la rama main
+      - main  # Despliega cuando hay cambios en la rama principal
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET 8.0 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'  # Instala .NET SDK 8.0
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build project for x86 (32-bit)
-      run: dotnet build --configuration Release --runtime win-x86 --no-restore
+      - name: Build the application for x86
+        run: dotnet publish -c Release -r win-x86 --self-contained
 
-    - name: Publish project for x86 (32-bit)
-      run: dotnet publish -c Release -r win-x86 -o ./output --self-contained
+      - name: Upload to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ftp://<ftp_server>
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./bin/Release/net8.0/win-x86/publish  # Directorio de la aplicación compilada
+          server-dir: /remote-path/  # Directorio en el servidor FTP donde se desplegará la app
 
-    - name: Upload to FTP
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
-      with:
-        ftp-server: ${{ secrets.FTP_SERVER }}
-        ftp-username: ${{ secrets.FTP_USERNAME }}
-        ftp-password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./output  # La carpeta que contiene los archivos compilados
-        git-ftp-args: --insecure  # Opcional: útil si el servidor tiene SSL autogenerado
